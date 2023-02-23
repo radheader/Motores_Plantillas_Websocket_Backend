@@ -1,0 +1,17 @@
+<div>
+    <h1>{{mensaje}}</h1>
+    {{> contador}}
+    <p> Hola, {{user.nombre}} </p>
+    {{#if isManager}}
+        {{#each productos}}
+        <div>
+            <p>{{this.id}}</p>
+            <p>{{this.descripcion}}</p>
+            <p>{{this.precio}}</p>
+            <p>{{this.stock}}</p
+        </div>
+        {{/each}}
+    {{else}}
+        <p>No sos Tutor</p>
+    {{/if}}
+</div>
