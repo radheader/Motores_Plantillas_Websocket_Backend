@@ -1,4 +1,4 @@
-const fs = require("fs");
+import fs from "fs";
 
 class Contenedor {
   constructor(fileName, keys) {
@@ -228,4 +228,4 @@ class Contenedor {
   }
 }
 
-module.exports = Contenedor;
+export default Contenedor;
