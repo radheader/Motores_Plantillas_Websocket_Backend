@@ -1,28 +1,42 @@
 import express from 'express';
 const app = express();
-
 import routerProducts from "./routes/productos.routes.js";
-import routerCart from "./routes/carrito.routes.js"
+import routerCart from "./routes/carrito.routes.js";
+import { fileURLToPath } from 'url'
+import { dirname } from 'path'
+import multer from 'multer'
 
-/*-------------------------------Dotenv---------------------------------------------*/
+const upload = multer ({dest :'src/public/img'})
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
-import dotenv from 'dotenv';
-dotenv.config();
-console.log(`Port... ${process.env.TOKEN}`);
+
+import { engine } from 'express-handlebars';
+import * as path from 'path';
+
+// import {create} from  'express-handlebars'; Servers mas complejos
 
 /*--------------------------------Middlewares---------------------------------------------*/
 app.use(express.json());
-app.use(express.urlencoded({extended:true}));
+app.use(express.urlencoded({extended:true}))
+app.use('/static',express.static(__dirname + '/public'))
 
-const authMiddleware = app.use((req, res, next) => {
-    req.header('authorization') == process.env.TOKEN 
-        ? next()
-        : res.status(401).json({"error": "unauthorized"})
-})
-/*---------------------Rutas--------------------------------------------------*/
+
+app.engine("handlebars",engine()) //Handlebars
+app.set("view engine", "handlebars") //Handlebars
+app.set("views", path.resolve()) //Handlebars
+
+
+/*---------------------Middlewares Rutas--------------------------------------------------*/
+
 app.use('/api/productos', routerProducts);
 app.use('/api/carrito', routerCart);
 
+app.post('/upload',upload.single('product'), (req,res) => {
+    console.log(req.body)
+    console.log(req.file)
+    res.send("Imagen cargada")
+})
 
 const PORT = 8020;
 const server = app.listen(PORT, () => {
